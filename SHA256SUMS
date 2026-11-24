@@ -1,2 +1,4 @@
 64fafe76855850385aa86ebb80c04d6fe3b2596329c0eae9dc56bd6b7e209951  external-module/hello-counter/hello-counter.wasm
 f7d7dd81fe8020ffe2920284a9dd2c457aa892427aeacb5d6dba13284e15ca66  external-module/tampered/tampered.wasm
+b45c53474df074452532e50f368a08e94008265e14e166140949517071ca0d2f  external-module/import-wasi/import-wasi.wasm
+bec2316d146ecdf4a17bbd5d38a9f6149600705833c1db09a8d798356dd20100  external-module/travel-album/travel-album.wasm
