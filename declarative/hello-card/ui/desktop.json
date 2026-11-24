@@ -1,0 +1,24 @@
+{
+ "templateId": "hello-card",
+ "version": "1",
+ "title": "Hello card (desktop)",
+ "description": "Sample declarative applet: one greeting card, wider layout. Row[Column[Text(title), Text(message)], Text(from)].",
+ "catalogId": "desktop-ai:v1",
+ "theme": {
+  "backgroundColor": "#FFF8E7",
+  "textColor": "#1A1A1A"
+ },
+ "root": {
+  "component": "Row",
+  "children": [
+   {
+    "component": "Column",
+    "children": [
+     {"component": "Text", "text": {"path": "/title"}, "style": "headline"},
+     {"component": "Text", "text": {"path": "/message"}}
+    ]
+   },
+   {"component": "Text", "text": {"path": "/from"}, "style": "caption"}
+  ]
+ }
+}

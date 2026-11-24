@@ -1,0 +1,27 @@
+{
+  "appletVersion": 1,
+  "id": "u/samples/hello-card",
+  "version": "0.1.0",
+  "class": "media.greeting-card",
+  "title": "Hello card",
+  "a2ui": "0.9",
+  "dataSchema": "schema/data.schema.json",
+  "variants": [
+    {
+      "profile": {"form": "phone", "input": "touch"},
+      "catalogs": ["desktop-ai:v1"],
+      "ui": "ui/phone.json",
+      "integrity": {"sha256": "95cb4bfa9c128098a1b8f1ae99218a47d9559e199cd90e9c92df7f8f4ec66794"},
+      "origin": "baseline"
+    },
+    {
+      "profile": {"form": "desktop", "input": "pointer"},
+      "catalogs": ["desktop-ai:v1"],
+      "ui": "ui/desktop.json",
+      "integrity": {"sha256": "398e930720664cdca379e6a878fc493d8ef25d4b1b6e45bc09ae8616591ca26a"},
+      "origin": "baseline"
+    }
+  ],
+  "logic": null,
+  "license": "Apache-2.0"
+}

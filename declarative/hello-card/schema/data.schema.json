@@ -1,0 +1,12 @@
+{
+ "$schema": "https://json-schema.org/draft/2020-12/schema",
+ "title": "hello-card data",
+ "type": "object",
+ "additionalProperties": false,
+ "required": ["title", "message", "from"],
+ "properties": {
+  "title": {"type": "string", "maxLength": 60},
+  "message": {"type": "string", "maxLength": 280},
+  "from": {"type": "string", "maxLength": 60}
+ }
+}
