@@ -76,7 +76,7 @@
   (data (i32.const 0x0a00) "}}\"}")                                ;; 4
   ;; byte 0x01 in the three ui.publish templates above marks where the surfaceId goes
   (data (i32.const 0x0b00) "\"surfaceId\":\"")                    ;; 13
-  (data (i32.const 0x0b20) "{\"err\":\"no surfaceId\"}")          ;; 23
+  (data (i32.const 0x0b20) "{\"err\":\"no surfaceId\"}")          ;; 22
   ;; 0x0c00-0x0c3f : the surfaceId in use (length in $sid_len)
 
   ;; ---- small helpers ----
@@ -293,13 +293,13 @@
     (if (call $has (local.get $p) (local.get $n) (i32.const 0x0000) (i32.const 13))
       (then
         (if (i32.eqz (call $read_sid (local.get $p) (local.get $n)))
-          (then (return (call $reply (i32.const 0x0b20) (i32.const 23)))))
+          (then (return (call $reply (i32.const 0x0b20) (i32.const 22)))))
         (call $boot)
         (return (call $reply (i32.const 0x0180) (i32.const 11)))))
     (if (call $has (local.get $p) (local.get $n) (i32.const 0x0020) (i32.const 15))
       (then
         (if (i32.eqz (call $read_sid (local.get $p) (local.get $n)))
-          (then (return (call $reply (i32.const 0x0b20) (i32.const 23)))))
+          (then (return (call $reply (i32.const 0x0b20) (i32.const 22)))))
         (call $boot) (call $restore_snapshot (local.get $p) (local.get $n))
             (return (call $reply (i32.const 0x0180) (i32.const 11)))))
     (if (call $has (local.get $p) (local.get $n) (i32.const 0x0040) (i32.const 14))
