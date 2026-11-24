@@ -11,7 +11,12 @@ wasm-validate --disable-bulk-memory --disable-reference-types --disable-multi-va
   external-module/hello-counter/hello-counter.wasm
 python3 external-module/tampered/make_tampered.py \
   external-module/hello-counter/hello-counter.wasm external-module/tampered/tampered.wasm
+wat2wasm external-module/hello-counter-0.2.1/hello-counter.wat -o external-module/hello-counter-0.2.1/hello-counter.wasm
+wasm-validate --disable-bulk-memory --disable-reference-types --disable-multi-value \
+  --disable-sign-ext --disable-saturating-float-to-int --disable-simd \
+  external-module/hello-counter-0.2.1/hello-counter.wasm
 wat2wasm external-module/import-wasi/import-wasi.wat -o external-module/import-wasi/import-wasi.wasm
 wasm-validate external-module/import-wasi/import-wasi.wasm
 sha256sum external-module/hello-counter/hello-counter.wasm external-module/tampered/tampered.wasm \
+  external-module/hello-counter-0.2.1/hello-counter.wasm \
   external-module/import-wasi/import-wasi.wasm external-module/travel-album/travel-album.wasm

@@ -11,6 +11,7 @@ realistic test input; its source is not part of this repository.
 | Path | What it is |
 |---|---|
 | `external-module/hello-counter/` | A minimal logic module, written by hand in WebAssembly text (`.wat`). Tap **+1** to count, **Reset** to clear; the count is kept in key-value storage. No SDK, no WASI, MVP instructions only. |
+| `external-module/hello-counter-0.2.1/` | hello-counter **0.2.1**: same counter, but it takes the `surfaceId` from the context the host passes at init / resume and draws only on that surface. A host that enforces "an instance draws only on its own surface" rejects 0.1.0's hard-coded `"main"`. Without a usable `surfaceId` 0.2.1 replies `{"err":"no surfaceId"}` and publishes nothing. 0.1.0 above is kept byte-for-byte, because published packages pin its digest. |
 | `external-module/tampered/` | `hello-counter.wasm` with **one byte changed on purpose**. Use it to test that a host rejects a module whose SHA-256 does not match. Do not use it as a real module. |
 | `external-module/import-wasi/` | A module that **breaks the import rule on purpose**: it imports WASI `proc_exit` instead of `claw.claw_host_call`. A platform must reject it at admission. Use it only as a negative test. |
 | `external-module/travel-album/` | The logic module of an interactive travel album, **compiled only**: the `.wasm` and a description, no source. In this build **Next** moves two pages. See its `README.md`. |
@@ -39,7 +40,7 @@ Tools: WABT 1.0.36 (`wat2wasm`, `wasm-validate`) and Python 3.
 ./build.sh
 ```
 
-It rebuilds the three `.wasm` files that have source here (hello-counter, tampered,
+It rebuilds the four `.wasm` files that have source here (hello-counter 0.1.0 and 0.2.1, tampered,
 import-wasi), and prints their SHA-256 together with that of `travel-album.wasm`,
 which is checked but not rebuilt. The output must match `SHA256SUMS`:
 
@@ -51,6 +52,7 @@ To run the hello-counter behaviour test (needs `pip install wasmtime==27.0.2`):
 
 ```sh
 python3 external-module/hello-counter/test_host.py external-module/hello-counter/hello-counter.wasm
+python3 external-module/hello-counter-0.2.1/test_host.py external-module/hello-counter-0.2.1/hello-counter.wasm
 ```
 
 ## Using a module by URL
