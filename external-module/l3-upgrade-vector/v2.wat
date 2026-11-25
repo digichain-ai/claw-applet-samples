@@ -35,10 +35,10 @@
   (data (i32.const 3328) "{\"snapshot\":\"\00")
   (data (i32.const 3584) "{\"version\":\"v0.9\",\"createSurface\":{\"surfaceId\":\"\00")
   (data (i32.const 3840) "0123456789abcdef\00")
-  (data (i32.const 4096) "\",\"catalogId\":\"desktop-ai:v1\"}},\00")
+  (data (i32.const 4096) "\",\"catalogId\":\"desktop-ai:v1\"}}\00")
   (data (i32.const 4608) "{\"version\":\"v0.9\",\"updateComponents\":{\"surfaceId\":\"\00")
   (data (i32.const 5120) "\",\"components\":[{\"id\":\"root\",\"component\":\"Column\",\"children\":[\"title\",\"status\",\"inc\"]},{\"id\":\"title\",\"component\":\"Text\",\"text\":\"L3 换版向量 v2（1.0.1）\"},{\"id\":\"status\",\"component\":\"Text\",\"text\":\"schema 2 · \00")
-  (data (i32.const 5632) "\"},{\"id\":\"inc\",\"component\":\"Button\",\"child\":\"incLabel\",\"action\":{\"event\":{\"name\":\"applet.increment\"}}},{\"id\":\"incLabel\",\"component\":\"Text\",\"text\":\"+1\"}]}}]\00")
+  (data (i32.const 5632) "\"},{\"id\":\"inc\",\"component\":\"Button\",\"child\":\"incLabel\",\"action\":{\"event\":{\"name\":\"applet.increment\"}}},{\"id\":\"incLabel\",\"component\":\"Text\",\"text\":\"+1\"}]}}\00")
   (data (i32.const 6144) "init · 计数 \00")
   (data (i32.const 6400) "resume · 计数 \00")
   (data (i32.const 6656) "已迁移 1→2（来自 \00")
@@ -168,16 +168,22 @@
       (br $l)))
     (local.get $len))
 
-  ;; 一次 ui.publish；create=1 时带 createSurface
+  ;; 把 [10240, e) 的信封包成 {"op":"ui.publish","envelope":"…"} 发出
+  (func $send (param $e i32) (local $r i32)
+    (local.set $r (call $emitz (i32.const 18432) (i32.const 2816)))
+    (local.set $r (call $emit_esc (local.get $r) (i32.const 10240) (local.get $e)))
+    (local.set $r (call $emitz (local.get $r) (i32.const 3072)))
+    (drop (call $hc (i32.const 18432) (i32.sub (local.get $r) (i32.const 18432)))))
+
+  ;; 一次发布；create=1 时先单独发 createSurface
   (func $publish (param $create i32) (local $e i32) (local $r i32)
-    (local.set $e (i32.const 10240))
-    (i32.store8 (local.get $e) (i32.const 91)) ;; [
-    (local.set $e (i32.add (local.get $e) (i32.const 1)))
+    ;; F26 host-api-v1.wit：每次 ui.publish 只提交一条 A2UI v0.9 信封（不是数组）：createSurface 一次、updateComponents 一次。
     (if (local.get $create) (then
-      (local.set $e (call $emitz (local.get $e) (i32.const 3584)))
+      (local.set $e (call $emitz (i32.const 10240) (i32.const 3584)))
       (local.set $e (call $emitn (local.get $e) (i32.const 9216) (global.get $surf_len)))
-      (local.set $e (call $emitz (local.get $e) (i32.const 4096)))))
-    (local.set $e (call $emitz (local.get $e) (i32.const 4608)))
+      (local.set $e (call $emitz (local.get $e) (i32.const 4096)))
+      (call $send (local.get $e))))
+    (local.set $e (call $emitz (i32.const 10240) (i32.const 4608)))
     (local.set $e (call $emitn (local.get $e) (i32.const 9216) (global.get $surf_len)))
     (local.set $e (call $emitz (local.get $e) (i32.const 5120)))
     (if (i32.eq (global.get $how) (i32.const 2))
@@ -188,10 +194,7 @@
       (else (local.set $e (call $emitz (local.get $e) (select (i32.const 6400) (i32.const 6144) (global.get $how))))))
     (local.set $e (call $emit_u32 (local.get $e) (global.get $count)))
     (local.set $e (call $emitz (local.get $e) (i32.const 5632)))
-    (local.set $r (call $emitz (i32.const 18432) (i32.const 2816)))
-    (local.set $r (call $emit_esc (local.get $r) (i32.const 10240) (local.get $e)))
-    (local.set $r (call $emitz (local.get $r) (i32.const 3072)))
-    (drop (call $hc (i32.const 18432) (i32.sub (local.get $r) (i32.const 18432)))))
+    (call $send (local.get $e)))
 
   ;; 把 8976 起 n 字节写成 {"snapshot":"<hex>"}
   (func $snap_reply (param $n i32) (result i64) (local $o i32) (local $i i32) (local $b i32)
