@@ -7,13 +7,13 @@ next to it. ABI `claw-applet/1`, capability `ui` only, no WASI, no assets.
 
 | File | Package version | `logic.state.schema` | Bytes | SHA-256 |
 |---|---|---|---|---|
-| `v1.wasm` | 1.0.0 | 1 | 3033 | `ebc320cf502e94638f79a12c44c85bde72f75f4542f2d6129e34e3ff2fcd147b` |
-| `v2.wasm` | 1.0.1 | 2 | 3615 | `c91b77e546c7686a534339d0b2ebffe6c5c55ee0de5feb4bdad268179728700e` |
-| `v3.wasm` | 1.0.2 | 3 | 3076 | `5b00384b5a79a2795225e03a86cf614486a0419c1fa570bce4333d1ae5014f4e` |
+| `v1.wasm` | 1.0.0 | 1 | 3041 | `cc18f6017fb91599467ed77f50adfff219f4fc25e3fa0c19e706fa21ed08db27` |
+| `v2.wasm` | 1.0.1 | 2 | 3624 | `95e94160c5bb1c5fdf26c92a9a5bde551246c5bf6c5d8c30bfb3a2dc76f1271a` |
+| `v3.wasm` | 1.0.2 | 3 | 3084 | `c99e5ae3b8424c32c607e2d84db04f8200241eda586e976cced1ffd9af3f21e1` |
 
 ## What each version does
 
-All three show one screen: a title, a status line
+Each `ui.publish` carries **one** A2UI v0.9 envelope (not an array): `createSurface` once, then `updateComponents` (F26 host-api-v1.wit). All three show one screen: a title, a status line
 `schema N · <init|resume|migrated> · count N`, and a **+1** button that sends
 the action `applet.increment`. The `surfaceId` comes from the context; it
 defaults to `main`. The text contains no personal data.
